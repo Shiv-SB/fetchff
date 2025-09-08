@@ -16,11 +16,13 @@ export function isSearchParams(data: unknown): data is URLSearchParams {
 
 /**
  * Determines if a value is a non-null object.
- *
+ * TODO: This will return true for objects that arent records, i.e Dates, arrays.
  * @param {any} value - The value to check.
  * @returns {boolean} - True if the value is a non-null object.
  */
-export function isObject(value: any): value is Record<string, any> {
+export function isObject(
+  value: any,
+): value is Record<string | number | symbol, any> {
   return value !== null && typeof value === OBJECT;
 }
 

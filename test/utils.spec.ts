@@ -209,6 +209,41 @@ describe('Utils', () => {
       it('should return false for undefined', () => {
         expect(isObject(undefined)).toBe(false);
       });
+
+      it('should return false for null', () => {
+        expect(isObject(null)).toBe(false);
+      });
+
+      it('should return false for an empty array', () => {
+        expect(isObject([])).toBe(false);
+      });
+
+      it('should return false for an empty string', () => {
+        expect(isObject('')).toBe(false);
+      });
+    });
+    describe('non-record-like objects should return false', () => {
+      it('should return false for a Date object', () => {
+        expect(isObject(new Date())).toBe(false);
+      });
+
+      it('should return false for a non-empty array', () => {
+        expect(isObject(['foo', 'bar'])).toBe(false);
+      });
+
+      it('should return false when keys are not a string', () => {
+        expect(isObject({ 1: 'foo', '2': 'bar' })).toBe(false);
+      });
+    });
+    describe('record-like objects should return true', () => {
+      it('should return true for an object with string keys', () => {
+        expect(isObject({ foo: 'bar' })).toBe(true);
+      });
+
+      it('should return true for an object with a mix of valid key types', () => {
+        const symbol: unique symbol = Symbol('foo!');
+        expect(isObject({ foo: 'foo', 1: 'bar', [symbol]: 'baz' })).toBe(true);
+      });
     });
   });
 
