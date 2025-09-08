@@ -8,6 +8,7 @@ import {
   sanitizeObject,
   isObject,
   shallowSerialize,
+  isAbsoluteUrl,
 } from '../src/utils';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -752,6 +753,25 @@ describe('Utils', () => {
       const result = appendQueryParams(url, params);
 
       expect(result).toBe(url);
+    });
+  });
+
+  describe('isAbsoluteUrl()', () => {
+    it('should return true for absolute URLs', () => {
+      const schemes = ['http', 'https', 'ftp', 'file', 'mailto'];
+      for (const scheme of schemes) {
+        expect(isAbsoluteUrl(`${scheme}://foo`)).toBe(true);
+      }
+    });
+
+    it('should return false for malformed URLs', () => {
+      expect(isAbsoluteUrl('http//foo')).toBe(false);
+      expect(isAbsoluteUrl('://foo')).toBe(false);
+      expect(isAbsoluteUrl('')).toBe(false);
+    });
+
+    it('should return false for relative URLs', () => {
+      expect(isAbsoluteUrl('/path/to/resource')).toBe(false);
     });
   });
 
