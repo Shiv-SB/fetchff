@@ -7,6 +7,7 @@ import {
   sortObject,
   sanitizeObject,
   isObject,
+  shallowSerialize,
 } from '../src/utils';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -281,6 +282,72 @@ describe('Utils', () => {
     it('should return true for Request and Response objects', () => {
       expect(isObject(new Response())).toBe(true);
       expect(isObject(new Request('https://foo'))).toBe(true);
+    });
+  });
+
+  describe('shallowSerialize()', () => {
+    it('should serialize a simple object with string values', () => {
+      const obj = { foo: 'bar', baz: 'qux' };
+      const result = shallowSerialize(obj);
+      // Order is not guaranteed, so check both possibilities
+      expect(['foo:barbaz:qux', 'baz:quxfoo:bar']).toContain(result);
+    });
+
+    it('should serialize an object with number and boolean values', () => {
+      const obj = { a: 1, b: true, c: false };
+      const result = shallowSerialize(obj);
+      // Order is not guaranteed
+      expect([
+        'a:1b:truec:false',
+        'a:1c:falseb:true',
+        'b:truea:1c:false',
+        'b:truec:falsea:1',
+        'c:falsea:1b:true',
+        'c:falseb:truea:1',
+      ]).toContain(result);
+    });
+
+    it('should serialize an object with undefined and null values', () => {
+      const obj = { a: undefined, b: null };
+      const result = shallowSerialize(obj);
+      expect(['a:undefinedb:null', 'b:nulla:undefined']).toContain(result);
+    });
+
+    it('should not serialize inherited properties', () => {
+      const proto = { inherited: 'value' };
+      const obj = Object.create(proto);
+      obj.own = 'ownValue';
+      const result = shallowSerialize(obj);
+      expect(result).toBe('own:ownValue');
+    });
+
+    it('should serialize an empty object as an empty string', () => {
+      expect(shallowSerialize({})).toBe('');
+    });
+
+    it('should serialize an object with symbol keys as if they do not exist', () => {
+      const sym = Symbol('sym');
+      const obj = { foo: 'bar' };
+      // @ts-expect-error Test case for non existant prop.
+      obj[sym] = 'baz';
+      const result = shallowSerialize(obj);
+      expect(result).toBe('foo:bar');
+    });
+
+    it('should serialize an object with array and object values as their string representation', () => {
+      const obj = { arr: [1, 2], obj: { nested: 'value' } };
+      const result = shallowSerialize(obj);
+      // [1,2] becomes '1,2', {nested:'value'} becomes '[object Object]'
+      expect([
+        'arr:1,2obj:[object Object]',
+        'obj:[object Object]arr:1,2',
+      ]).toContain(result);
+    });
+
+    it('should serialize keys with special characters', () => {
+      const obj = { 'a-b': 1, 'c d': 2 };
+      const result = shallowSerialize(obj);
+      expect(['a-b:1c d:2', 'c d:2a-b:1']).toContain(result);
     });
   });
 
