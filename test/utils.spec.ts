@@ -447,7 +447,6 @@ describe('Utils', () => {
     });
 
     it('should return false for non-plain objects', () => {
-      expect(isJSONSerializable(new Date())).toBe(false);
       expect(isJSONSerializable(new Map())).toBe(false);
       expect(isJSONSerializable(new Set())).toBe(false);
       expect(isJSONSerializable(new WeakMap())).toBe(false);
@@ -470,6 +469,7 @@ describe('Utils', () => {
         },
       };
       expect(isJSONSerializable(obj)).toBe(true);
+      expect(isJSONSerializable(new Date())).toBe(true);
     });
 
     it('should return false for functions', () => {
