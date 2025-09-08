@@ -23,7 +23,11 @@ export function isSearchParams(data: unknown): data is URLSearchParams {
 export function isObject(
   value: any,
 ): value is Record<string | number | symbol, any> {
-  return value !== null && typeof value === OBJECT;
+  return (
+    value !== null &&
+    typeof value === OBJECT &&
+    Object.prototype.toString.call(value) === '[object Object]'
+  );
 }
 
 /**

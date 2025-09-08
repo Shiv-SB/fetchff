@@ -230,10 +230,6 @@ describe('Utils', () => {
       it('should return false for a non-empty array', () => {
         expect(isObject(['foo', 'bar'])).toBe(false);
       });
-
-      it('should return false when keys are not a string', () => {
-        expect(isObject({ 1: 'foo', '2': 'bar' })).toBe(false);
-      });
     });
     describe('record-like objects should return true', () => {
       it('should return true for an object with string keys', () => {
@@ -243,6 +239,18 @@ describe('Utils', () => {
       it('should return true for an object with a mix of valid key types', () => {
         const symbol: unique symbol = Symbol('foo!');
         expect(isObject({ foo: 'foo', 1: 'bar', [symbol]: 'baz' })).toBe(true);
+      });
+
+      it('should return true for nested objects', () => {
+        const obj = {
+          1: {
+            2: {
+              3: 'foo',
+              4: 'bar',
+            },
+          },
+        };
+        expect(isObject(obj)).toBe(true);
       });
     });
   });
