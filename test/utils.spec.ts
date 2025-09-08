@@ -6,6 +6,7 @@ import {
   processHeaders,
   sortObject,
   sanitizeObject,
+  isObject,
 } from '../src/utils';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -200,6 +201,14 @@ describe('Utils', () => {
       // Note: The exact sort order may vary by JavaScript engine,
       // but generally alphabetical with unicode collation rules
       expect(keys.indexOf('a')).toBeLessThan(keys.indexOf('b'));
+    });
+  });
+
+  describe('isObject()', () => {
+    describe('falsey values should return false', () => {
+      it('should return false for undefined', () => {
+        expect(isObject(undefined)).toBe(false);
+      });
     });
   });
 

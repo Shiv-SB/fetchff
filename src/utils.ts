@@ -10,7 +10,7 @@ import type {
 // Prevent stack overflow with recursion depth limit
 const MAX_DEPTH = 10;
 
-export function isSearchParams(data: unknown): boolean {
+export function isSearchParams(data: unknown): data is URLSearchParams {
   return data instanceof URLSearchParams;
 }
 
