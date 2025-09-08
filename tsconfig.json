@@ -2,7 +2,7 @@
   "include": ["src", "test", "docs/examples"],
   "compilerOptions": {
     "experimentalDecorators": true,
-    "module": "esnext",
+    "module": "node16",
     "lib": ["dom", "esnext", "es2021"],
     "importHelpers": true,
     "declaration": true,
@@ -13,7 +13,7 @@
     "noFallthroughCasesInSwitch": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "moduleResolution": "node",
+    "moduleResolution": "node16",
     "esModuleInterop": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
