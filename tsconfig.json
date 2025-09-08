@@ -3,6 +3,7 @@
   "compilerOptions": {
     "experimentalDecorators": true,
     "module": "node16",
+    "isolatedModules": true,
     "lib": ["dom", "esnext", "es2021"],
     "importHelpers": true,
     "declaration": true,
